@@ -1,3 +1,3 @@
 # Database-Lab
-Contains solutions to DATABASE LAB 
-Weekly updates 
+Contains solutions to DATABASE LAB  
+Updated weekly
