@@ -1,38 +1,37 @@
-create table EMPLOYEE(
-EmpNo numeric(5) primary key,
-EmpName varchar(20) not null,
-Gender character(1) not null check(Gender = 'M' OR Gender = 'F'),
-Salary numeric(10) not null,
-Address varchar(50) not null,
-DNo numeric(5));
+create table employee(
+  empno numeric(5) primary key,
+  empname varchar(20) not null, 
+  gender char(1) not null check (gender = 'm' or gender = 'f'),
+  address varchar(20) not null,
+  salary numeric(8)  not null,
+  Dno numeric(5)
+);
 
-create table DEPARTMENT(
-DeptNo numeric(5) primary key,
-/*Candidate key is DeptName:*/
-DeptName varchar(50) unique);
+create table department(
+    deptno numeric(5) primary key,
+    deptname varchar(20) unique,
+    location varchar(20)
+);
 
-alter table EMPLOYEE add constraint FK_DNo foreign key(DNo) references DEPARTMENT(DeptNo);
+alter table employee add constraint FK_Dno foreign key  (Dno) references department(deptno); 
 
-insert into DEPARTMENT values(1, 'SWD');
-insert into DEPARTMENT values(2, 'ML');
-insert into DEPARTMENT values(3, 'QUANT');
-insert into DEPARTMENT values(4, 'NETWORK');
+insert into department values(1,'CS','manipal');
+insert into department values(2,'MECH','mangalore');
+insert into department values(3,'ELECTRONICS','hyd');
 
-insert into EMPLOYEE values(1,'Joshua','M', 45000,'LA',1);
-insert into EMPLOYEE values(2,'Justin','M', 90000,'CAN',2);
-insert into EMPLOYEE values(3,'Heidy','F', 100000,'CAL',1);
-insert into EMPLOYEE values(4,'Anthony','M', 60000,'NYC',4);
+insert into employee values(1,'john','m','hyd',14000,2);
+insert into employee values(2,'surya','m','manipal',45000,1);
+insert into employee values(3,'alex','f','us',45000,3);
 
-/*Violate the constraints of primary key of employee and DEPARTMENT*/
-insert into DEPARTMENT values(1, 'HARDWARE');
-insert into DEPARTMENT values(2, 'CLOUD');
+select* from employee;
+select* from department; 
 
-insert into EMPLOYEE values(1,'Justin','M', 45000,'LA',1);
-insert into EMPLOYEE values(2,'Joshua','K', 45000,'CAN',2);
+insert into department values(4,'COMMS','maa');
+insert into employee values(1,'josh','m','sin',40321);
+insert into employee values(2,'morgan','m','uk',23200);
 
-delete from DEPARTMENT where DeptNo in(select DNo from EMPLOYEE group by DNo having count(*) > 1 );
+alter table employee drop constraint FK_Dno;
+alter table employee add constraint FK_Dno foreign key (Dno) references department (Dno) delete on cascade;
 
-alter table EMPLOYEE drop constraint FK_DNo;
-alter table EMPLOYEE add constraint FK_DNo foreign key (DNo) references DEPARTMENT(DeptNo) ON delete cascade;
-
+alter table employee modify salary = 10000;
 
