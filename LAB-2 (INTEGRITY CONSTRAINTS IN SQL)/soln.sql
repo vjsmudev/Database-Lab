@@ -46,4 +46,58 @@ SELECT instructor.id from instructor WHERE ID NOT IN (SELECT DISTINCT course_id 
 
 SELECT student.name, course.title, takes.year FROM student,course,takes,section WHERE student.id = takes.id and course.course_id = section.course_id and course.course_id = takes.course_id and takes.year = section.year and takes.semester = section.semester and takes.sec_id = section.sec_id and room_number = 303;
 
-SELECT name,course_id,title as c_name from (student natural join takes) where year = 2015; 
+SELECT student.name, takes.course_id, course.title AS c_name FROM student INNER JOIN takes ON student.id = takes.id INNER JOIN course ON takes.course_id = course.course_id WHERE takes.year = 2010;
+
+SELECT T.name, T.salary as inst_salary from instructor T, instructor S where T.salary > S.salary and S.dept_name = 'Comp. Sci.';
+
+SELECT name from instructor where dept_name LIKE '%ch%';
+
+SELECT name, LEN (name) from student;
+
+SELECT dept_name,substr (dept_name,3,3) from instructor as ExtractString;
+
+SELECT UPPER(name) from instructor;
+
+SELECT NVL(grade,0) from takes;
+
+SELECT salary, ROUND(salary/3,-2) from instructor;  
+
+ALTER TABLE employee ADD (date dob);
+
+UPDATE employee set dob = '30-NOV-2000' where empno = 1;
+
+UPDATE employee set dob = '8-MAR-2001' where empno = 2;
+
+UPDATE employee set dob = '07-JAN-2002' where empno = 3;
+
+UPDATE employee set dob = '10-OCT-2003' where empno = 4;
+
+SELECT empname,dob from employee;
+
+SELECT empname, TO_CHAR(dob, 'DD-MON-YYYY') FROM employee;
+
+SELECT empname, TO_CHAR(dob, 'DD-MON-YY') FROM employee;
+
+SELECT empname, TO_CHAR(dob, 'YEAR') YEAR FROM employee;
+
+SELECT empname, TO_CHAR(dob, 'Year') YEAR FROM employee;
+
+SELECT empname, TO_CHAR(dob, 'year') YEAR FROM employee;
+
+
+SELECT empname, TO_CHAR(dob, 'DAY') YEAR FROM employee;
+
+SELECT empname, TO_CHAR(dob, 'Day') YEAR FROM employee;
+
+SELECT empname, TO_CHAR(dob, 'day') YEAR FROM employee;
+
+SELECT empname, TO_CHAR(dob, 'MONTH') YEAR FROM employee;
+
+SELECT empname, TO_CHAR(dob, 'Month') YEAR FROM employee;
+
+SELECT empname, TO_CHAR(dob, 'month') YEAR FROM employee;
+
+SELECT empname, LAST_DAY(dob) from employee;
+
+SELECT empname, TRUNC(MONTHS_BETWEEN(SYSDATE,dob)/12) as age FROM employee; 
+
