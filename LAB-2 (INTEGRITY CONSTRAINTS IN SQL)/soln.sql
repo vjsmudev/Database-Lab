@@ -46,7 +46,7 @@ SELECT instructor.id from instructor WHERE ID NOT IN (SELECT DISTINCT course_id 
 
 SELECT student.name, course.title, takes.year FROM student,course,takes,section WHERE student.id = takes.id and course.course_id = section.course_id and course.course_id = takes.course_id and takes.year = section.year and takes.semester = section.semester and takes.sec_id = section.sec_id and room_number = 303;
 
-SELECT student.name, takes.course_id, course.title AS c_name FROM student INNER JOIN takes ON student.id = takes.id INNER JOIN course ON takes.course_id = course.course_id WHERE takes.year = 2010;
+SELECT student.name,takes.course_id,course.title as c_name from student,course,takes where student.id = takes.id and takes.course_id = course.course_id and takes.year = 2010;
 
 SELECT T.name, T.salary as inst_salary from instructor T, instructor S where T.salary > S.salary and S.dept_name = 'Comp. Sci.';
 
