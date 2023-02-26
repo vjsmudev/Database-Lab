@@ -44,4 +44,10 @@ SELECT dept_name from department WHERE budget < ALL(SELECT AVG(salary) FROM inst
 SELECT course_id FROM section WHERE semester = 'Fall' AND year = 2009 AND EXISTS (SELECT course_id FROM section WHERE semester = 'Spring' AND year = 2010);
 
 --14. Find all students who have taken all courses offered in the Biology department.
-SELECT id from student,takes 
+SELECT id,name FROM student WHERE EXISTS (SELECT course_id from course where dept_name = 'Biology');  
+
+-- 15.Find all courses that were offered at most once in 2009.
+SELECT course_id FROM course WHERE EXISTS (SELECT course_id,semester FROM takes WHERE year = 2009);
+
+--16. Find all the students who have opted at least two courses offered by CSE department
+SELECT id,name FROM student id NOT IN (SELECT t.id, c.dept_name from takes t, course c wher )
