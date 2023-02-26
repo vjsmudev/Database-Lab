@@ -52,7 +52,7 @@ SELECT T.name, T.salary as inst_salary from instructor T, instructor S where T.s
 
 SELECT name from instructor where dept_name LIKE '%ch%';
 
-SELECT name, LEN (name) from student;
+SELECT name, LENGTH (name) from student;
 
 SELECT dept_name,substr (dept_name,3,3) from instructor as ExtractString;
 
