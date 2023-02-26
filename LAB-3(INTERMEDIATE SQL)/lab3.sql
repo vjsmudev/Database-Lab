@@ -1,24 +1,47 @@
-select course_id from section where semester = 'Fall' and year = 2009 union select course_id from section where semester = 'Spring' and year = 2010;
+--1. Find courses that ran in Fall 2009 or in Spring 2010
 
-select course_id from section where semester = 'Fall' and year = 2009 intersect select course_id from section where semester = 'Spring' and year = 2010;
+SELECT course_id FROM section WHERE semester = 'Fall' AND year = 2009 UNION SELECT course_id FROM section WHERE semester = 'Spring' and year = 2010; 
 
-select course_id from section where semester = 'Fall' and year = 2009 minus select course_id from section where semester = 'Spring' and year = 2010;
+--2. Find courses that ran in Fall 2009 and in spring 2010
 
-select course.course_id from course where course.course_id not in (select takes.course_id from takes);
+SELECT course_id FROM section WHERE semester = 'Fall' AND year = 2009 INTERSECT SELECT course_id FROM section WHERE semester = 'Spring' and year = 2010; 
 
-SELECT s1.course_id from section s1 where semester = 'Fall' AND year = 2009 AND s1.course_id in (SELECT s2.course_id from  section s2 where semester = 'Spring' and year = 2010);
+--3. Find courses that ran in Fall 2009 but not in Spring 2010
 
-SELECT COUNT (UNIQUE takes.id) from takes where takes.course_id in (SELECT teaches.course_id from teaches where teaches.id = 10101); 
+SELECT course_id FROM section WHERE semester = 'Fall' AND year = 2009 MINUS SELECT course_id FROM section WHERE semester = 'Spring' and year = 2010; 
 
-SELECT s1.course_id from section s1 where semester = 'Fall' and year = 2009 and s1.course_id not in (select s2.course_id from section s2 where semester = 'Spring' and year = 2010);
+--4. Find the name of the course for which none of the students registered
 
-SELECT student.name from student where student.name in (SELECT instructor.name from instructor);
+SELECT course_id FROM course where course_id NOT IN (SELECT course_id from section);
 
-SELECT t1.name from instructor t1 where t1.salary > SOME (SELECT t2.salary from instructor t2 where dept_name = 'Biology');
+--5. Find courses offered in Fall 2009 and in Spring 2010.
 
-SELECT dept_name, AVG(salary) FROM instructor group by dept_name HAVING AVG(salary) >= ALL(SELECT AVG(salary) from instructor by dept_name);
+SELECT course_id FROM section WHERE semester = 'Fall' AND year = 2009 AND course_id IN (SELECT course_id FROM section WHERE semester = 'Spring' AND year = 2010);
 
-select department.dept_name from department where department.budget <  (SELECT avg (instructor.salary) from instructor);
+--6. Find the total number of students who have taken course taught by the instructor with ID 10101.
 
-select course_id from section where semester = 'Fall' and year = 2009 and EXISTS (SELECT course_id from section where semester = 'Spring' and year = 2010);
+SELECT COUNT(DISTINCT id) FROM takes WHERE course_id in (SELECT course_id FROM teaches WHERE id = 10101);
 
+--7. Find courses offered in Fall 2009 but not in Spring 2010.
+SELECT course_id FROM section WHERE semester = 'Fall' AND year = 2009 AND course_id NOT IN (SELECT course_id FROM section WHERE semester = 'Spring' AND year = 2010);
+
+--8. Find the names of all students whose name is same as the instructor’s name.
+SELECT student.name FROM student,instructor WHERE student.name = instructor.name;
+
+--9. Find names of instructors with salary greater than that of some (at least one) instructor in the Biology department.
+SELECT name, salary FROM instructor WHERE salary > SOME (SELECT salary  FROM instructor WHERE dept_name = 'Biology'); 
+
+--10. Find the names of all instructors whose salary is greater than the salary of all instructors in the Biology department.
+SELECT name, salary FROM instructor WHERE salary > ALL(SELECT salary  FROM instructor WHERE dept_name = 'Biology'); 
+
+--11. Find the departments that have the highest average salary.
+SELECT dept_name, AVG(salary) FROM instructor GROUP BY dept_name having AVG(salary) >= ALL(SELECT AVG (salary) FROM instructor GROUP BY dept_name);
+
+--12. Find the names of those departments whose budget is lesser than the average salary of all instructors.
+SELECT dept_name from department WHERE budget < ALL(SELECT AVG(salary) FROM instructor);
+
+--13. Find all courses taught in both the Fall 2009 semester and in the Spring 2010 semester.
+SELECT course_id FROM section WHERE semester = 'Fall' AND year = 2009 AND EXISTS (SELECT course_id FROM section WHERE semester = 'Spring' AND year = 2010);
+
+--14. Find all students who have taken all courses offered in the Biology department.
+SELECT id from student,takes 
