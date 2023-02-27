@@ -25,7 +25,7 @@ SELECT COUNT(DISTINCT id) FROM takes WHERE course_id in (SELECT course_id FROM t
 SELECT course_id FROM section WHERE semester = 'Fall' AND year = 2009 AND course_id NOT IN (SELECT course_id FROM section WHERE semester = 'Spring' AND year = 2010);
 
 --8. Find the names of all students whose name is same as the instructor’s name.
-SELECT student.name FROM student,instructor WHERE student.name = instructor.name;
+select name from student where name in(select name from instructor);
 
 --9. Find names of instructors with salary greater than that of some (at least one) instructor in the Biology department.
 SELECT name, salary FROM instructor WHERE salary > SOME (SELECT salary  FROM instructor WHERE dept_name = 'Biology'); 
