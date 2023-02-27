@@ -41,4 +41,48 @@ with maxbud(val) as (select max(budget)from department) select dept_name,budget 
 with dept_total(dept_name, value) as (select dept_name, sum(salary) from instructor group by dept_name),dept_total_avg(value) as (select avg(value) from dept_total) select dept_name from dept_total, dept_total_avg where dept_total.value >= dept_total_avg.value;
 
 --15. Find the sections that had the maximum enrolment in Fall 2009
-with e_roll(val) as select 
+WITH temp AS (SELECT max(count(id)) AS T FROM takes WHERE semester='Fall' and year=2009 group by sec_id) SELECT sec_id FROM temp,takes WHERE semester='Fall' and year=2009 group by sec_id,temp.T having count(id) = temp.T;
+
+--16. Select the names of those departments where the total credits earned by all the students is greater than the total credits earned by all the students in the Finance Department
+WITH temp AS (SELECT sum(tot_cred) AS T FROM student WHERE dept_name='Finance') SELECT dept_name FROM student,temp group by dept_name,temp.T having sum(tot_cred) > temp.T;
+
+--17.Delete all the instructors of Finance department.
+SAVEPOINT S;
+
+DELETE FROM instructor WHERE dept_name = 'Finance';
+
+SELECT* FROM instructor;
+
+ROLLBACK to S;
+
+SELECT* FROM instructor;
+--18. Delete all courses in CSE department.
+SAVEPOINT S1;
+
+DELETE FROM course WHERE dept_name = 'Comp. Sci.';
+
+SELECT* FROM course;
+
+ROLLBACK to S1;
+
+--19.Transfer all the students from CSE department to IT department.
+SAVEPOINT S2;
+
+INSERT INTO department values('IT', 'ORCL',100000);
+
+SELECT* from department;
+
+UPDATE student SET dept_name = 'IT' WHERE dept_name = 'Comp. Sci.';
+
+SELECT* FROM student;
+
+ROLLBACK TO S2;
+
+--20. Increase salaries of instructors whose salary is over $100,000 by 3%, and all others receive a 5% raise
+SAVEPOINT S3;
+
+update instructor set salary = case when salary > 90000 then salary*1.03 else salary*1.05 end;
+
+SELECT* FROM instructor;
+
+ROLLBACK TO S3;
