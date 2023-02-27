@@ -49,7 +49,7 @@ SELECT id,name FROM student WHERE EXISTS (SELECT course_id from course where dep
 SELECT course_id FROM course WHERE EXISTS (SELECT course_id,semester FROM takes WHERE year = 2009);
 
 --16. Find all the students who have opted at least two courses offered by CSE department
-select id from (select id, count(*) count from takes where takes.course_id like 'CS%' group by id) where count >= 2;select id from (select id, count(*) cnt from takes where takes.course_id like 'CS%' group by id) where cnt >= 2;
+select id from (select id, count(*) count from takes where takes.course_id like 'CS%' group by id) where count >= 2;
 
 --17. Find the average instructors salary of those departments where the average salary is greater than 42000
 SELECT dept_name, avg_sal FROM (SELECT dept_name, AVG(salary) avg_sal FROM instructor GROUP BY dept_name) WHERE avg_sal > 42000;
