@@ -76,21 +76,42 @@ SELECT instructor.id from instructor WHERE ID NOT IN (SELECT DISTINCT course_id 
 
 SELECT student.name, course.title, takes.year FROM student,course,takes,section WHERE student.id = takes.id and course.course_id = section.course_id and course.course_id = takes.course_id and takes.year = section.year and takes.semester = section.semester and takes.sec_id = section.sec_id and room_number = 303;
 
+--16. For all students who have opted courses in 2015, find their names and course id’s with the attribute course title replaced by c-name.
+
 SELECT student.name, takes.course_id, course.title AS c_name FROM student INNER JOIN takes ON student.id = takes.id INNER JOIN course ON takes.course_id = course.course_id WHERE takes.year = 2010;
+
+--17. Find the names of all instructors whose salary is greater than the salary of at least one instructor of CSE department and salary replaced by inst-salary
 
 SELECT T.name, T.salary as inst_salary from instructor T, instructor S where T.salary > S.salary and S.dept_name = 'Comp. Sci.';
 
+--18. Find the names of all instructors whose department name includes the substring ‘ch’.
+
 SELECT name from instructor where dept_name LIKE '%ch%';
+
+--19. List the student names along with the length of the student names.
 
 SELECT name, LENGTH (name) from student;
 
+--20. List the department names and 3 characters from 3rd position of each department name
+
 SELECT dept_name,substr (dept_name,3,3) from instructor;
+
+--21. List the instructor names in upper case.
 
 SELECT UPPER(name) from instructor;
 
+-- 22. Replace NULL with value1(say 0) for a column in any of the table
+
 SELECT NVL(grade,0) from takes;
 
+--23. Display the salary and salary/3 rounded to nearest hundred from Instructor
+
 SELECT salary, ROUND(salary/3,-2) from instructor;  
+
+/*24. Display the birth date of all the employees in the following format:
+ ‘DD-MON-YYYY’
+ ‘DD-MON-YY’
+ ‘DD-MM-YY’*/
 
 ALTER TABLE employee ADD (date dob);
 
@@ -104,6 +125,11 @@ UPDATE employee set dob = '10-OCT-2003' where empno = 4;
 
 SELECT empname,dob from employee;
 
+/*25. List the employee names and the year (fully spelled out) in which they are born
+ ‘YEAR’
+ ‘Year’
+ ‘year’*/
+
 SELECT empname, TO_CHAR(dob, 'DD-MON-YYYY') FROM employee;
 
 SELECT empname, TO_CHAR(dob, 'DD-MON-YY') FROM employee;
@@ -114,6 +140,9 @@ SELECT empname, TO_CHAR(dob, 'Year') YEAR FROM employee;
 
 SELECT empname, TO_CHAR(dob, 'year') YEAR FROM employee;
 
+/*26. List the employee names and the day of the week (fully spelled out) in which they are born
+ ‘DAY’
+ ‘Day’*/
 
 SELECT empname, TO_CHAR(dob, 'DAY') YEAR FROM employee;
 
@@ -121,18 +150,32 @@ SELECT empname, TO_CHAR(dob, 'Day') YEAR FROM employee;
 
 SELECT empname, TO_CHAR(dob, 'day') YEAR FROM employee;
 
+/*27. List the employee names and the month(fully spelled out) in which they are born
+ ‘MONTH’
+ ‘Month’*/
+
 SELECT empname, TO_CHAR(dob, 'MONTH') YEAR FROM employee;
 
 SELECT empname, TO_CHAR(dob, 'Month') YEAR FROM employee;
 
 SELECT empname, TO_CHAR(dob, 'month') YEAR FROM employee;
 
+--28. Find the last day of the month(and its day of the week) in which employee Mr. X is born
+
 SELECT empname, LAST_DAY(dob) from employee;
+
+--29. Find the age of all the employees
 
 SELECT  empname, ROUND(MONTHS_BETWEEN(CURRENT_DATE,dob)/12, 0) age from employee;
 
+-- 30. Find the Saturday following the Employee’s 60th birthday
+
 SELECT empname,dob, NEXT_DAY(ADD_MONTHS(dob,60*12),'SATURDAY') next_sat from employee;
 
+-- 31. List the employees whose birthday falls in the given year X
+
 SELECT empname from employee WHERE EXTRACT(YEAR FROM dob) = &x;
+
+--32. List the employees whose birthday fall between the given years X and Y
 
 SELECT empname from employee WHERE EXTRACT(YEAR FROM dob) BETWEEN &x AND &y;
